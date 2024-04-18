@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	fmt.Println("We GO Array")
@@ -10,5 +12,11 @@ func main() {
 	fruits[1] = "Banana"
 	fruits[3] = "Mango"
 
-	fmt.Println(len(fruits))
+	var nums = [6]int{}
+	nums[1] = 234
+	nums[2] = 3456
+	nums[5] = 56658
+
+	fmt.Printf("%T", nums)
+	fmt.Printf("%T", fruits)
 }
