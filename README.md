@@ -726,7 +726,60 @@ func checkNillErr(err error) {
 > `io/ioutils` is deprecated, hence using the `os` package for reading a file
 
 
+# 25. Handling web request in golang
 
+- [net/http](https://pkg.go.dev/net/http)
+- We receive a [`Response`](https://pkg.go.dev/net/http#Response) type back when making a web request
+  - The Close is important!
+  - > // ReadResponse nor Response.Write ever closes a connection.
+  - We need to manually close it
+- The type of response is `*http.Response` (a pointer)
+- `response.Body.Close()` is used to close the response
+- Making a `GET` request and reading the response
+
+```go
+response, err := http.Get(url)
+checkNillErr(err)
+defer response.Body.Close()
+
+fmt.Printf("Response is of type %T\n", response)
+
+dataBytes, err := io.ReadAll(response.Body)
+
+checkNillErr(err)
+content := string(dataBytes)
+fmt.Println("The content returned from the server is:\n", content)
+```
+
+
+
+# 26. Handling URL in golang
+
+```go
+result, _ := url.Parse(myurl)
+
+fmt.Println("Scheme:", result.Scheme)
+fmt.Println("Host:", result.Host)
+fmt.Println("Path:", result.Path)
+fmt.Println("Port:", result.Port())
+fmt.Println("RawQuery:", result.RawQuery)
+```
+
+- Query params are a type of `url.Values` (Key-value pairs)
+- Create a URL
+
+```go
+// need to pass reference
+partsOfUrl := &url.URL{
+	Scheme:   "https",
+	Host:     "lco.dev",
+	Path:     "/tutcss",
+	RawQuery: "user=kinjal",
+}
+
+anotherUrl := partsOfUrl.String()
+fmt.Println(anotherUrl)
+```
 
 
 
