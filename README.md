@@ -781,6 +781,33 @@ anotherUrl := partsOfUrl.String()
 fmt.Println(anotherUrl)
 ```
 
+# 28. How to make GET request in golang
+
+```go
+func PerformGetRequest() {
+	const myurl = "http://localhost:8000/get"
+
+	response, err := http.Get((myurl))
+	checkNillErr(err)
+	defer response.Body.Close()
+
+	fmt.Println("Status Code:", response.StatusCode)
+	fmt.Println("Content Length:", response.ContentLength)
+
+	content, _ := (io.ReadAll(response.Body))
+	fmt.Println(string(content))
+}
+```
+
+- Alternate way to handle byte to string conversation. This gives us more control, as we still have the raw data in the `responseString`
+
+```go
+var responseString strings.Builder
+byteCount, _ := responseString.Write(content)
+fmt.Println("ByteCount is:", byteCount)
+fmt.Println(responseString.String())
+```
+
 
 
 
