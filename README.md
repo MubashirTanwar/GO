@@ -809,6 +809,30 @@ fmt.Println(responseString.String())
 ```
 
 
+# 29. How to make POST request with JSON data in golang
+
+```go
+func PerformPostJsonRequest() {
+	const myurl = "http://localhost:8000/post"
+
+	// fake json payload
+	requestBody := strings.NewReader(`
+		{
+			"coursename":"Let's go with golang",
+			"price": 0,
+			"platform": "lco.in"
+		}
+	`)
+
+	response, err := http.Post(myurl, "application/json", requestBody)
+	checkNillErr(err)
+	defer response.Body.Close()
+
+	content, _ := (io.ReadAll(response.Body))
+
+	fmt.Println(string(content))
+}
+```
 
 
 
