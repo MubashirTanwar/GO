@@ -835,4 +835,25 @@ func PerformPostJsonRequest() {
 ```
 
 
+# 30. How to send form data in golang
+
+```go
+func PerformPostFormRequest() {
+	const myurl = "http://localhost:8000/postform"
+
+	// form data
+	data := url.Values{}
+	data.Add("firstname", "Mubashir")
+	data.Add("lastname", "Tanwar")
+	data.Add("Age", "21")
+
+	response, err := http.PostForm(myurl, data)
+	checkNillErr(err)
+	defer response.Body.Close()
+
+	content, _ := (io.ReadAll(response.Body))
+
+	fmt.Println(string(content))
+}
+```
 

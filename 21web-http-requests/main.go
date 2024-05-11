@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 )
-
-
 
 func main() {
 	fmt.Println("HTTP VERBS")
 	// GetRequest()
-	PostRequest()
+	// PostRequest()
+	FormRequest()
 }
 
 func GetRequest() {
@@ -52,6 +52,22 @@ func PostRequest() {
 	content, err := io.ReadAll(res.Body)
 	checkNilError(err)
 	fmt.Println(string(content))
+}
+
+func FormRequest() {
+	const myUrl = "http://localhost:3333/postform"
+
+	data := url.Values{}
+	data.Add("firstName", "Mubashir")
+	data.Add("lastName", "Tanwar")
+	data.Add("Age", "21")
+
+	res, err := http.PostForm(myUrl, data)
+	
+	checkNilError(err)
+	defer res.Body.Close()
+	content, _ := io.ReadAll(res.Body)
+	fmt.Println("Response", string(content))
 }
 
 func checkNilError(err error) {
