@@ -2,3 +2,4 @@ dump.md
 node_modules
 env
 *.txt
+*.exe
