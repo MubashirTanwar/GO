@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
+
 	"github.com/gorilla/mux"
 )
 
@@ -31,15 +33,38 @@ func (c *Courses) isEmpty() bool {
 
 func main() {
 	fmt.Println("WE ARE MAKING API")
+	r:= mux.NewRouter()
+	r.HandleFunc("/", home).Methods("GET")
+
+	courses = append(courses , Courses{
+		Id: "1", Name: "React", Price: 1000, Author: &Author{Name: "Mubashir",Email: "tanwar0210@gmail.com"},
+	})
+
+	courses = append(courses , Courses{
+		Id: "2", Name: "NodeJS", Price: 500, Author: &Author{Name: "Rahul",Email: "rahul0210@gmail.com"},
+	})
+
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+
+	r.HandleFunc("/course/{id}", getOneCourse).Methods("GET")
+
+	r.HandleFunc("/course", createOneCourse).Methods("POST")
+	
+	r.HandleFunc("/course/{id}", updateCourse).Methods("PUT")
+	
+	r.HandleFunc("/course/{id}", deleteCourse).Methods("DELETE")
+	
+	log.Fatal(http.ListenAndServe(":4000", r))
+	
 }
 
 // controllers ->
 
-func home(w http.ResponseWriter, r http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("<h1>This is the home route</h1>"))
 }
 
-func getAllCourses(w http.ResponseWriter, r http.Request) {
+func getAllCourses(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all Courses")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(courses)
@@ -74,7 +99,9 @@ func createOneCourse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// rand.Seed(time.Now().UnixNano())
+	rand.New(rand.NewSource(13))
+
+	// StringWithChar
 	// new(NewSource(time.Now().UnixNano()))
 	course.Id = strconv.Itoa(rand.Intn(10))
 	courses = append(courses, course)
@@ -144,9 +171,9 @@ func deleteCourse(w http.ResponseWriter, r *http.Request){
 
 	// TODO: handle target not found
 
-	_ = append(courses[:target], courses[target+1:]...)
+	c := append(courses[:target], courses[target+1:]...)
 	
-	json.NewEncoder(w).Encode("Updated Successfully")
+	json.NewEncoder(w).Encode(c)
 	
 }
 
